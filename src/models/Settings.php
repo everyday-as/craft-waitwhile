@@ -6,6 +6,8 @@ use craft\base\Model;
 
 class Settings extends Model
 {
+    protected $apiKey;
+
     public function init()
     {
         parent::init();
@@ -14,7 +16,7 @@ class Settings extends Model
     public function rules()
     {
         return [
-            [['view'], 'required'],
+            [['api_key'], 'required'],
         ];
     }
 }
