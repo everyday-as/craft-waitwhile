@@ -6,7 +6,8 @@ use craft\base\Model;
 
 class Settings extends Model
 {
-    protected $apiKey;
+    public $api_key;
+    public $waitlist_id;
 
     public function init()
     {
@@ -16,7 +17,7 @@ class Settings extends Model
     public function rules()
     {
         return [
-            [['api_key'], 'required'],
+            [['api_key', 'waitlist_id'], 'required'],
         ];
     }
 }

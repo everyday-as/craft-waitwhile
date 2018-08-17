@@ -1,12 +1,15 @@
 # Craft CMS Waitwhile Integration
 
-This plugin is currently a work in progress, and does not do anything currently. 
-I will update this 
+This plugin currently only gets certain waitlist API methods. View the documentation for more information.
+
+## Documentation
+
+The documentation can be found [here](https://github.com/Everyday-AS/craft-waitwhile/wiki)
 
 ## To do list
 - [x] Plugin boilerplate
-- [ ] Create a settings page
+- [x] Create a settings page
+- [x] Methods to return basic waitlist API
+- [x] Cache methods
 - [ ] Create a controller for submitting API requests to Waitwhile
-- [ ] Method to return average wait time
-- [ ] Make some front-end components as examples
 - [ ] Calendar to book time, showing available times (perhaps outside plugin scope)
