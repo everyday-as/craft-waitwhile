@@ -1,0 +1,17 @@
+{% import "_includes/forms" as forms %}
+
+<div style="margin-bottom: 15px;">
+    {{ forms.checkbox({
+        id: "maintenance",
+        label: "Enable",
+        checked: settings.maintenance,
+        name: 'maintenance'
+    }) }}
+</div>
+
+{{ forms.textField({
+    first: true,
+    label: "Maintenance view",
+    name: 'view',
+    value: settings.view
+}) }}
