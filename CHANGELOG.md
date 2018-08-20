@@ -1,5 +1,12 @@
 # Release Notes for Everyday Waitwhile
 
+## 1.0.4 - 2018-08-20
+
+### Added
+- Added localization
+- `Waitwhile@createWaitingGuest` now adds a waiting guest to Waitwhile
+- Added a `everyday-waitwhile/frontend/queue-form` template for submitting a `Waitwhile@createWaitingGuest` action
+
 ## 1.0.3 - 2018-08-20
 
 ### Fixed
