@@ -6,6 +6,7 @@
 - Added localization
 - `Waitwhile@createWaitingGuest` now adds a waiting guest to Waitwhile
 - Added a `everyday-waitwhile/frontend/queue-form` template for submitting a `Waitwhile@createWaitingGuest` action
+- Added a `BookingController`, a `Booking` model and `createBooking` method 
 
 ## 1.0.3 - 2018-08-20
 
