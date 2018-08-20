@@ -3,10 +3,11 @@
 namespace everyday\waitwhile\controllers;
 
 use craft\web\Controller;
+use everyday\waitwhile\models\Booking;
 use everyday\waitwhile\models\Guest;
 use everyday\waitwhile\models\Waitwhile;
 
-class QueueController extends Controller
+class BookingController extends Controller
 {
     protected $allowAnonymous = true;
 
@@ -14,17 +15,22 @@ class QueueController extends Controller
     {
         $params = \Craft::$app->request->bodyParams;
 
-        $guest = (new Guest())->setEmail($params['email'])->setPhone($params['phone'])->setName($params['name']);
+        $booking = (new Booking())
+            ->setEmail($params['email'])
+            ->setPhone($params['phone'])
+            ->setName($params['name'])
+            ->setDuration($params['time'])
+            ->setTime($params['time']);
 
-        if($guest->validate()){
+        if($booking->validate()){
             $waitwhile = new Waitwhile();
-            $waitwhile->createWaitingGuest($guest);
+            $waitwhile->createBooking($booking);
 
             $this->redirectToPostedUrl();
         }
 
         \Craft::$app->urlManager->setRouteParams(array(
-            'errors' => $guest->errors
+            'errors' => $booking->errors
         ));
     }
 }

@@ -115,8 +115,13 @@ class Waitwhile extends Model
         return $this->makeRequest('waitlists/' . $this->settings->waitlist_id . '/guests', 'POST', $guest->toArray());
     }
 
-    public function createBooking(): array
+    /**
+     * @param Booking $booking
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function createBooking(Booking $booking): array
     {
-
+        return $this->makeRequest('waitlists/' . $this->settings->waitlist_id . '/bookings', 'POST', $booking->toArray());
     }
 }

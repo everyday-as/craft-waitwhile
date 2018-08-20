@@ -4,9 +4,9 @@ namespace everyday\waitwhile\models;
 
 use craft\base\Model;
 
-class Guest extends Model
+class Booking extends Model
 {
-    public $name, $email, $phone, $notes;
+    public $name, $email, $phone, $notes, $duration, $time;
     public $state = 'waiting';
 
     public function init()
@@ -17,7 +17,7 @@ class Guest extends Model
     public function rules()
     {
         return [
-            [['name', 'state'], 'required'],
+            [['name', 'state', 'duration', 'time'], 'required'],
         ];
     }
 
@@ -61,6 +61,28 @@ class Guest extends Model
     public function setNotes($value)
     {
         $this->notes = $value;
+
+        return $this;
+    }
+
+    /**
+     * @param $value
+     * @return $this
+     */
+    public function setDuration($value)
+    {
+        $this->duration = $value;
+
+        return $this;
+    }
+
+    /**
+     * @param $value
+     * @return $this
+     */
+    public function setTime($value)
+    {
+        $this->time = $value;
 
         return $this;
     }

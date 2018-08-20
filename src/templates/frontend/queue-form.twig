@@ -1,0 +1,36 @@
+{% if errors is defined %}
+    {% for key in errors %}
+        <ul>
+            {% for error in key %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
+{% endif %}
+
+<form method="post" action="" accept-charset="UTF-8">
+    <input type="hidden" name="action" value="everyday-waitwhile/queue">
+    <input type="hidden" name="redirect" value="waitwhile-test">
+
+    {{ getCsrfInput() }}
+
+    <div class="form-group">
+        <label for="name">{{ 'name'|t('everyday-waitwhile') }}</label>
+
+        <input type="text" class="input" id="name" name="name">
+    </div>
+
+    <div class="form-group">
+        <label for="phone">{{ 'phone'|t('everyday-waitwhile') }}</label>
+
+        <input type="text" class="input" id="phone" name="phone">
+    </div>
+
+    <div class="form-group">
+        <label for="email">{{ 'email'|t('everyday-waitwhile') }}</label>
+
+        <input type="text" class="input" id="email" name="email">
+    </div>
+
+    <button class="button">{{ 'Submit'|t('app') }}</button>
+</form>

@@ -2,14 +2,16 @@
 
 namespace everyday\waitwhile;
 
+use craft\events\RegisterTemplateRootsEvent;
 use craft\events\RegisterUrlRulesEvent;
 use craft\web\UrlManager;
-use everyday\waitwhile\controllers\WaitwhileController;
+use craft\web\View;
 use everyday\waitwhile\models\Settings;
 use craft\web\twig\variables\CraftVariable;
 use everyday\waitwhile\models\Waitwhile;
 use everyday\waitwhile\twig\WaitwhileTwigExtension;
 use yii\base\Event;
+use craft\i18n\PhpMessageSource;
 
 class Plugin extends \craft\base\Plugin
 {
@@ -36,10 +38,22 @@ class Plugin extends \craft\base\Plugin
             \Craft::$app->view->registerTwigExtension($extension);
         }
 
-        // register routes
-        Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_SITE_URL_RULES, function(RegisterUrlRulesEvent $event) {
-            $event->rules[$this->id . '/queue'] = $this->id . '/queue';
-        });
+        // template root
+        Event::on(
+            View::class,
+            View::EVENT_REGISTER_SITE_TEMPLATE_ROOTS,
+            function(RegisterTemplateRootsEvent $event) {
+                $event->roots['_everyday-waitwhile'] = __DIR__ . '/templates/frontend';
+            }
+        );
+
+        // translation source
+        \Craft::$app->i18n->translations['everyday-waitwhile'] = [
+            'class' => PhpMessageSource::class,
+            'sourceLanguage' => 'en',
+            'basePath' => __DIR__ . '/translations',
+            'allowOverrides' => true,
+        ];
     }
 
     /**
