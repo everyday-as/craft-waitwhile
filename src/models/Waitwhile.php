@@ -4,8 +4,6 @@ namespace everyday\waitwhile\models;
 
 use craft\base\Model;
 use everyday\waitwhile\Plugin;
-use yii\caching\Cache;
-use yii\caching\FileCache;
 
 class Waitwhile extends Model
 {
@@ -34,11 +32,6 @@ class Waitwhile extends Model
         if($this->settings->api_key === null){
             return;
         }
-
-        // set headers
-        $this->headers = [
-            'apiKey: ' . $this->settings->api_key
-        ];
     }
 
     /**
@@ -46,21 +39,22 @@ class Waitwhile extends Model
      * @param string $method
      * @param array $data
      * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function curlRequest($endpoint, $method = 'GET', $data = []): array
+    public function makeRequest($endpoint, $method = 'GET', $data = []): array
     {
-        $ch = curl_init();
+        $client = \Craft::createGuzzleClient([
+            'headers' => [
+                'User-Agent' => 'Craft/' . \Craft::$app->getVersion() . ' ' . \GuzzleHttp\default_user_agent(),
+                'apiKey' => $this->settings->api_key
+            ],
+            'base_uri' => 'https://api.waitwhile.com/v1/',
+            'form_params' => $data,
+        ]);
 
-        curl_setopt($ch,CURLOPT_URL, 'https://api.waitwhile.com/v1/' . $endpoint);
-        curl_setopt($ch,CURLOPT_HTTPHEADER, $this->headers);
-        curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
-        curl_setopt($ch,CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($ch,CURLOPT_USERAGENT, "Everyday Waitwhile Integration For Craft CMS");
+        $res = $client->request($method, $endpoint)->getBody()->getContents();
 
-        $result = json_decode(curl_exec($ch), true);
-        curl_close($ch);
-
-        return $result;
+        return json_decode($res, true);
     }
 
     /**
@@ -71,7 +65,7 @@ class Waitwhile extends Model
         $settings = $this->settings;
 
         return \Craft::$app->cache->getOrSet("waitwhileWaitlist", function ($cache) use($settings) {
-            return $this->waitlist === null ? $this->curlRequest('waitlists/' . $this->settings->waitlist_id) : $this->waitlist;
+            return $this->waitlist === null ? $this->makeRequest('waitlists/' . $this->settings->waitlist_id) : $this->waitlist;
         }, 300);
     }
 
@@ -83,7 +77,7 @@ class Waitwhile extends Model
         $settings = $this->settings;
 
         return \Craft::$app->cache->getOrSet("waitwhileAllWaitlists", function ($cache) use($settings) {
-            return $this->waitlists === null ? $this->curlRequest('waitlists') : $this->waitlists;
+            return $this->waitlists === null ? $this->makeRequest('waitlists') : $this->waitlists;
         }, 300);
     }
 
@@ -95,7 +89,7 @@ class Waitwhile extends Model
         $settings = $this->settings;
 
         return \Craft::$app->cache->getOrSet("waitwhileWaitlistStatus", function ($cache) use($settings) {
-            return $this->waitlistStatus === null ? $this->curlRequest('waitlists/' . $this->settings->waitlist_id . '/status') : $this->waitlistStatus;
+            return $this->waitlistStatus === null ? $this->makeRequest('waitlists/' . $this->settings->waitlist_id . '/status') : $this->waitlistStatus;
         }, 300);
     }
 
@@ -107,13 +101,18 @@ class Waitwhile extends Model
         $settings = $this->settings;
 
         return \Craft::$app->cache->getOrSet("waitwhileWaitingGuests", function ($cache) use($settings) {
-            return $this->guestsWaiting === null ? $this->curlRequest('waitlists/' . $this->settings->waitlist_id . '/waiting') : $this->guestsWaiting;
+            return $this->guestsWaiting === null ? $this->makeRequest('waitlists/' . $this->settings->waitlist_id . '/waiting') : $this->guestsWaiting;
         }, 300);
     }
 
-    public function createWaitingGuest(): array
+    /**
+     * @param Guest $guest
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function createWaitingGuest(Guest $guest): array
     {
-
+        return $this->makeRequest('waitlists/' . $this->settings->waitlist_id . '/guests', 'POST', $guest->toArray());
     }
 
     public function createBooking(): array

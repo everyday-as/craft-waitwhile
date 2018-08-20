@@ -2,6 +2,9 @@
 
 namespace everyday\waitwhile;
 
+use craft\events\RegisterUrlRulesEvent;
+use craft\web\UrlManager;
+use everyday\waitwhile\controllers\WaitwhileController;
 use everyday\waitwhile\models\Settings;
 use craft\web\twig\variables\CraftVariable;
 use everyday\waitwhile\models\Waitwhile;
@@ -32,6 +35,11 @@ class Plugin extends \craft\base\Plugin
             $extension = new WaitwhileTwigExtension();
             \Craft::$app->view->registerTwigExtension($extension);
         }
+
+        // register routes
+        Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_SITE_URL_RULES, function(RegisterUrlRulesEvent $event) {
+            $event->rules[$this->id . '/queue'] = $this->id . '/queue';
+        });
     }
 
     /**
