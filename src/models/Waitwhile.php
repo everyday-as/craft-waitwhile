@@ -3,10 +3,7 @@
 namespace everyday\waitwhile\models;
 
 use craft\base\Model;
-use craft\feeds\GuzzleClient;
 use everyday\waitwhile\Plugin;
-use yii\caching\Cache;
-use yii\caching\FileCache;
 
 class Waitwhile extends Model
 {
@@ -51,7 +48,8 @@ class Waitwhile extends Model
                 'User-Agent' => 'Craft/' . \Craft::$app->getVersion() . ' ' . \GuzzleHttp\default_user_agent(),
                 'apiKey' => $this->settings->api_key
             ],
-            'base_uri' => 'https://api.waitwhile.com/v1/'
+            'base_uri' => 'https://api.waitwhile.com/v1/',
+            'form_params' => $data,
         ]);
 
         $res = $client->request($method, $endpoint)->getBody()->getContents();
@@ -107,9 +105,14 @@ class Waitwhile extends Model
         }, 300);
     }
 
-    public function createWaitingGuest(): array
+    /**
+     * @param Guest $guest
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function createWaitingGuest(Guest $guest): array
     {
-
+        return $this->makeRequest('waitlists/' . $this->settings->waitlist_id . '/guests', 'POST', $guest->toArray());
     }
 
     public function createBooking(): array
