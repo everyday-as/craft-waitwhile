@@ -14,6 +14,13 @@ class Guest extends Model
         parent::init();
     }
 
+    public function rules()
+    {
+        return [
+            [['name', 'state'], 'required'],
+        ];
+    }
+
     /**
      * @param $value
      * @return $this
