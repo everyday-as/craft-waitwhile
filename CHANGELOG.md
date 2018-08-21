@@ -1,5 +1,8 @@
 # Release Notes for Everyday Waitwhile
 
+## 1.0.5 - 
+- Added `Waitwhile@getBookings`
+
 ## 1.0.4 - 2018-08-20
 
 ### Added
