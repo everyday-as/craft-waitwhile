@@ -12,6 +12,7 @@ class Waitwhile extends Model
     public $waitlistStatus = null;
     public $guests = null;
     public $guestsWaiting = null;
+    public $bookings = null;
 
     protected $headers;
     protected $settings;
@@ -102,6 +103,18 @@ class Waitwhile extends Model
 
         return \Craft::$app->cache->getOrSet("waitwhileWaitingGuests", function ($cache) use($settings) {
             return $this->guestsWaiting === null ? $this->makeRequest('waitlists/' . $this->settings->waitlist_id . '/waiting') : $this->guestsWaiting;
+        }, 300);
+    }
+
+    /**
+     * @return array
+     */
+    public function getBookings(): array
+    {
+        $settings = $this->settings;
+
+        return \Craft::$app->cache->getOrSet("waitwhileBookings", function ($cache) use($settings) {
+            return $this->bookings === null ? $this->makeRequest('waitlists/' . $this->settings->waitlist_id . '/bookings') : $this->bookings;
         }, 300);
     }
 
