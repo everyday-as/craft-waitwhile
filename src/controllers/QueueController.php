@@ -21,13 +21,21 @@ class QueueController extends Controller
 
         if($guest->validate()){
             $waitwhile = new Waitwhile();
+
             $response = $waitwhile->createWaitingGuest($guest);
 
-            \Craft::$app->getSession()->set('waitwhile', $response);
-            return $this->redirect(isset($params['redirect']) ? $params['redirect'] : '/');
+            if(!$waitwhile->error){
+                \Craft::$app->getSession()->set('waitwhile', $response);
+                return $this->redirect(isset($params['redirect']) ? $params['redirect'] : '/');
+            }
+
+            // a non 2xx response:
+            return \Craft::$app->urlManager->setRouteParams(array(
+                'errors' => $waitwhile->errors
+            ));
         }
 
-        \Craft::$app->urlManager->setRouteParams(array(
+        return \Craft::$app->urlManager->setRouteParams(array(
             'errors' => $guest->errors
         ));
     }

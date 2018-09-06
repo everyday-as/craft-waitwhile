@@ -14,6 +14,8 @@ class Waitwhile extends Model
     public $guestsWaiting = null;
     public $bookings = null;
     public $resources = null;
+    public $error = false;
+    public $errors = [];
 
     protected $headers;
     protected $settings;
@@ -55,18 +57,25 @@ class Waitwhile extends Model
      */
     public function makeRequest($endpoint, $method = 'GET', $data = []): array
     {
-        $client = \Craft::createGuzzleClient([
-            'headers' => [
-                'User-Agent' => 'Craft/' . \Craft::$app->getVersion() . ' ' . \GuzzleHttp\default_user_agent(),
-                'apiKey' => $this->settings->api_key
-            ],
-            'base_uri' => 'https://api.waitwhile.com/v1/',
-            'form_params' => $data,
-        ]);
+        try {
+            $client = \Craft::createGuzzleClient([
+                'headers' => [
+                    'User-Agent' => 'Craft/' . \Craft::$app->getVersion() . ' ' . \GuzzleHttp\default_user_agent(),
+                    'apiKey' => $this->settings->api_key
+                ],
+                'base_uri' => 'https://api.waitwhile.com/v1/',
+                'form_params' => $data,
+            ]);
 
-        $res = $client->request($method, $endpoint)->getBody()->getContents();
+            $res = $client->request($method, $endpoint)->getBody()->getContents();
 
-        return json_decode($res, true);
+            return json_decode($res, true);
+        } catch (\Exception $e) {
+            $this->error = true;
+            $this->errors[] = ['api' => 'Received an invalid response from the Waitwhile API'];
+        }
+
+        return [];
     }
 
     /**
