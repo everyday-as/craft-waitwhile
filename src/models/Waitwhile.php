@@ -13,6 +13,7 @@ class Waitwhile extends Model
     public $guests = null;
     public $guestsWaiting = null;
     public $bookings = null;
+    public $resources = null;
 
     protected $headers;
     protected $settings;
@@ -33,6 +34,16 @@ class Waitwhile extends Model
         if($this->settings->api_key === null){
             return;
         }
+    }
+
+    /**
+     * Fetch the waitwhile session
+     *
+     * @return mixed
+     */
+    public function getSession()
+    {
+        return \Craft::$app->getSession()->get('waitwhile');
     }
 
     /**
@@ -136,5 +147,17 @@ class Waitwhile extends Model
     public function createBooking(Booking $booking): array
     {
         return $this->makeRequest('waitlists/' . $this->settings->waitlist_id . '/bookings', 'POST', $booking->toArray());
+    }
+
+    /**
+     * @return array
+     */
+    public function getResources(): array
+    {
+        $settings = $this->settings;
+
+        return \Craft::$app->cache->getOrSet("waitwhileResources", function ($cache) use($settings) {
+            return $this->resources === null ? $this->makeRequest('resources') : $this->resources;
+        }, 300);
     }
 }

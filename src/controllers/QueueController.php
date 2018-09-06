@@ -14,13 +14,18 @@ class QueueController extends Controller
     {
         $params = \Craft::$app->request->bodyParams;
 
-        $guest = (new Guest())->setEmail($params['email'])->setPhone($params['phone'])->setName($params['name']);
+        $guest = (new Guest())
+            ->setEmail($params['email'])
+            ->setPhone($params['phone'])
+            ->setName($params['name'])
+            ->setRedirect($params['redirect']);
 
         if($guest->validate()){
             $waitwhile = new Waitwhile();
-            $waitwhile->createWaitingGuest($guest);
+            $response = $waitwhile->createWaitingGuest($guest);
 
-            $this->redirectToPostedUrl();
+            \Craft::$app->getSession()->set('waitwhile', $response);
+            return $this->redirect($guest->redirect);
         }
 
         \Craft::$app->urlManager->setRouteParams(array(
