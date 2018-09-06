@@ -5,6 +5,7 @@
 - Added a `Waitwhile@getResources` method
 - Create a `Waitwhile@getSession` method for the `Waitwhile` class to expose the API response on the following page
 - The above means that `craft.waitwhile.getSession` grabs the previous API response
+- Added validation rules for email and phone fields for the `Guest` model
 
 ## 1.0.4 - 2018-08-20
 
