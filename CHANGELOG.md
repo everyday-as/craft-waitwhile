@@ -3,7 +3,6 @@
 ## 1.0.5 - 
 - Added a `Waitwhile@getBookings` method
 - Added a `Waitwhile@getResources` method
-- Require a redirect field to be set on submission to the `everyday-waitwhile/queue` action
 - Create a `Waitwhile@getSession` method for the `Waitwhile` class to expose the API response on the following page
 - The above means that `craft.waitwhile.getSession` grabs the previous API response
 

@@ -17,15 +17,14 @@ class QueueController extends Controller
         $guest = (new Guest())
             ->setEmail($params['email'])
             ->setPhone($params['phone'])
-            ->setName($params['name'])
-            ->setRedirect($params['redirect']);
+            ->setName($params['name']);
 
         if($guest->validate()){
             $waitwhile = new Waitwhile();
             $response = $waitwhile->createWaitingGuest($guest);
 
             \Craft::$app->getSession()->set('waitwhile', $response);
-            return $this->redirect($guest->redirect);
+            return $this->redirect(isset($params['redirect']) ? $params['redirect'] : '/');
         }
 
         \Craft::$app->urlManager->setRouteParams(array(

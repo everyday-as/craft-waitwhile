@@ -6,7 +6,7 @@ use craft\base\Model;
 
 class Guest extends Model
 {
-    public $name, $email, $phone, $notes, $redirect;
+    public $name, $email, $phone, $notes;
     public $state = 'waiting';
 
     public function init()
@@ -17,7 +17,9 @@ class Guest extends Model
     public function rules()
     {
         return [
-            [['name', 'state', 'redirect'], 'required'],
+            [
+                ['name', 'state'], 'required'
+            ],
         ];
     }
 
@@ -72,17 +74,6 @@ class Guest extends Model
     public function setState($value)
     {
         $this->state = $value;
-
-        return $this;
-    }
-
-    /**
-     * @param $value
-     * @return $this
-     */
-    public function setRedirect($value)
-    {
-        $this->redirect = $value;
 
         return $this;
     }
