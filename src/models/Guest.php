@@ -20,7 +20,33 @@ class Guest extends Model
             [
                 ['name', 'state'], 'required'
             ],
+            [
+                'phone', 'phoneLandcodeRequired'
+            ],
+            [
+                'email', 'emailValid'
+            ]
         ];
+    }
+
+    /**
+     * @param $attribute
+     */
+    public function phoneLandcodeRequired($attribute)
+    {
+        if(substr($this->$attribute, 0, strlen('+')) !== '+'){
+            $this->addError($attribute, \Craft::t('everyday-waitwhile', 'phone_landcode_required'));
+        }
+    }
+
+    /**
+     * @param $attribute
+     */
+    public function emailValid($attribute)
+    {
+        if (!filter_var($this->$attribute, FILTER_VALIDATE_EMAIL)) {
+            $this->addError($attribute, \Craft::t('everyday-waitwhile', 'email_invalid'));
+        }
     }
 
     /**
