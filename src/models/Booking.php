@@ -17,8 +17,37 @@ class Booking extends Model
     public function rules()
     {
         return [
-            [['name', 'state', 'duration', 'time'], 'required'],
+            [
+                ['name', 'state', 'duration', 'time'],
+                'required'
+            ],
+            [
+                'phone', 'phoneCountryCodeRequired'
+            ],
+            [
+                'email', 'emailValid'
+            ]
         ];
+    }
+
+    /**
+     * @param $attribute
+     */
+    public function phoneCountryCodeRequired($attribute)
+    {
+        if(substr($this->$attribute, 0, strlen('+')) !== '+'){
+            $this->addError($attribute, \Craft::t('everyday-waitwhile', 'phone_landcode_required'));
+        }
+    }
+
+    /**
+     * @param $attribute
+     */
+    public function emailValid($attribute)
+    {
+        if (!filter_var($this->$attribute, FILTER_VALIDATE_EMAIL)) {
+            $this->addError($attribute, \Craft::t('everyday-waitwhile', 'email_invalid'));
+        }
     }
 
     /**

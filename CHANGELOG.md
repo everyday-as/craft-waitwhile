@@ -3,6 +3,8 @@
 ## 1.0.6 - 2018-08-07
 - Added support for a hidden input field called `country_code` in submission for action `everyday-waitwhile/queue`
 (input is without +, only the actual country code) 
+- Added `notes` input to Queue and Booking
+- Added same validation Guest received in 1.0.5 to Booking
 
 ## 1.0.5 - 2018-08-06
 - Added a `Waitwhile@getBookings` method

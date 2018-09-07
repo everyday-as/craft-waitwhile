@@ -24,6 +24,7 @@ class QueueController extends Controller
         $guest = (new Guest())
             ->setEmail($params['email'])
             ->setPhone($phone)
+            ->setNotes(isset($params['notes']) ? $params['notes'] : null)
             ->setName($params['name']);
 
         if($guest->validate()){

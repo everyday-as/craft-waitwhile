@@ -19,7 +19,8 @@ class BookingController extends Controller
             ->setEmail($params['email'])
             ->setPhone($params['phone'])
             ->setName($params['name'])
-            ->setDuration($params['time'])
+            ->setNotes(isset($params['notes']) ? $params['notes'] : null)
+            ->setDuration($params['duration'])
             ->setTime($params['time']);
 
         if($booking->validate()){

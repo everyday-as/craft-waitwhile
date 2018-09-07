@@ -21,7 +21,7 @@ class Guest extends Model
                 ['name', 'state'], 'required'
             ],
             [
-                'phone', 'phoneLandcodeRequired'
+                'phone', 'phoneCountryCodeRequired'
             ],
             [
                 'email', 'emailValid'
@@ -32,7 +32,7 @@ class Guest extends Model
     /**
      * @param $attribute
      */
-    public function phoneLandcodeRequired($attribute)
+    public function phoneCountryCodeRequired($attribute)
     {
         if(substr($this->$attribute, 0, strlen('+')) !== '+'){
             $this->addError($attribute, \Craft::t('everyday-waitwhile', 'phone_landcode_required'));
