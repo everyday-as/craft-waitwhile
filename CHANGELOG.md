@@ -5,6 +5,8 @@
 (input is without +, only the actual country code) 
 - Added `notes` input to Queue and Booking
 - Added same validation Guest received in 1.0.5 to Booking
+- Make sure some fields truly are optional
+- Require PHP 7.0 or above
 
 ## 1.0.5 - 2018-08-06
 - Added a `Waitwhile@getBookings` method
