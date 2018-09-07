@@ -1,6 +1,6 @@
 # Release Notes for Everyday Waitwhile
 
-## 1.0.6 - 2018-08-07
+## 1.0.6 - 2018-09-07
 - Added support for a hidden input field called `country_code` in submission for action `everyday-waitwhile/queue`
 (input is without +, only the actual country code) 
 - Added `notes` input to Queue and Booking
@@ -8,7 +8,7 @@
 - Make sure some fields truly are optional
 - Require PHP 7.0 or above
 
-## 1.0.5 - 2018-08-06
+## 1.0.5 - 2018-09-06
 - Added a `Waitwhile@getBookings` method
 - Added a `Waitwhile@getResources` method
 - Create a `Waitwhile@getSession` method for the `Waitwhile` class to expose the API response on the following page
