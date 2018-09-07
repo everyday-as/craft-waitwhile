@@ -1,6 +1,10 @@
 # Release Notes for Everyday Waitwhile
 
-## 1.0.5 - 
+## 1.0.6 - 2018-08-07
+- Added support for a hidden input field called `country_code` in submission for action `everyday-waitwhile/queue`
+(input is without +, only the actual country code) 
+
+## 1.0.5 - 2018-08-06
 - Added a `Waitwhile@getBookings` method
 - Added a `Waitwhile@getResources` method
 - Create a `Waitwhile@getSession` method for the `Waitwhile` class to expose the API response on the following page
