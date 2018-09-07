@@ -14,17 +14,17 @@ class QueueController extends Controller
     {
         $params = \Craft::$app->request->bodyParams;
 
-        $phone = $params['phone'];
+        $phone = $params['phone'] ?? null;
 
         // if landcode hidden input field is set, append this to phone number unless phone number starts with +
-        if(isset($params['country_code']) && substr($phone, 0, strlen('+')) !== '+'){
+        if($phone !== null && isset($params['country_code']) && substr($phone, 0, strlen('+')) !== '+'){
             $phone = '+' . $params['country_code'] . $phone;
         }
 
         $guest = (new Guest())
-            ->setEmail($params['email'])
+            ->setEmail($params['email'] ?? null)
             ->setPhone($phone)
-            ->setNotes(isset($params['notes']) ? $params['notes'] : null)
+            ->setNotes($params['notes'] ?? null)
             ->setName($params['name']);
 
         if($guest->validate()){

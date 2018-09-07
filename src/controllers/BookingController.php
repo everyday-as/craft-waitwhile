@@ -15,11 +15,18 @@ class BookingController extends Controller
     {
         $params = \Craft::$app->request->bodyParams;
 
+        $phone = $params['phone'] ?? null;
+
+        // if landcode hidden input field is set, append this to phone number unless phone number starts with +
+        if($phone !== null && isset($params['country_code']) && substr($phone, 0, strlen('+')) !== '+'){
+            $phone = '+' . $params['country_code'] . $phone;
+        }
+
         $booking = (new Booking())
-            ->setEmail($params['email'])
-            ->setPhone($params['phone'])
+            ->setEmail($params['email'] ?? null)
+            ->setPhone($phone)
             ->setName($params['name'])
-            ->setNotes(isset($params['notes']) ? $params['notes'] : null)
+            ->setNotes($params['notes'] ?? null)
             ->setDuration($params['duration'])
             ->setTime($params['time']);
 
