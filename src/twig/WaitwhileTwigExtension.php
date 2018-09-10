@@ -2,6 +2,8 @@
 
 namespace everyday\waitwhile\twig;
 
+use everyday\waitwhile\models\Waitwhile;
+
 class WaitwhileTwigExtension extends \Twig_Extension
 {
     /**
@@ -21,7 +23,7 @@ class WaitwhileTwigExtension extends \Twig_Extension
      */
     function waitwhile_unix_ms_to_human($value)
     {
-        return gmdate("H:i", $value / 1000);
+        return Waitwhile::unix_ms_to_human($value);
     }
 
     /**
@@ -30,6 +32,6 @@ class WaitwhileTwigExtension extends \Twig_Extension
      */
     function waitwhile_unix_ms_to_minutes($value)
     {
-        return round($value / 1000 / 60);
+        return Waitwhile::unix_ms_to_minutes($value);
     }
 }

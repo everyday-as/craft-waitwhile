@@ -3,6 +3,7 @@
 namespace everyday\waitwhile\models;
 
 use craft\base\Model;
+use everyday\waitwhile\Plugin;
 
 class Booking extends Model
 {
@@ -52,9 +53,9 @@ class Booking extends Model
 
     /**
      * @param $value
-     * @return $this
+     * @return Booking
      */
-    public function setName($value)
+    public function setName($value): self
     {
         $this->name = $value;
 
@@ -63,9 +64,9 @@ class Booking extends Model
 
     /**
      * @param $value
-     * @return $this
+     * @return Booking
      */
-    public function setEmail($value)
+    public function setEmail($value): self
     {
         $this->email = $value;
 
@@ -74,9 +75,9 @@ class Booking extends Model
 
     /**
      * @param $value
-     * @return $this
+     * @return Booking
      */
-    public function setPhone($value)
+    public function setPhone($value): self
     {
         $this->phone = $value;
 
@@ -85,9 +86,9 @@ class Booking extends Model
 
     /**
      * @param $value
-     * @return $this
+     * @return Booking
      */
-    public function setNotes($value)
+    public function setNotes($value): self
     {
         $this->notes = $value;
 
@@ -96,9 +97,9 @@ class Booking extends Model
 
     /**
      * @param $value
-     * @return $this
+     * @return Booking
      */
-    public function setDuration($value)
+    public function setDuration($value): self
     {
         $this->duration = $value;
 
@@ -107,9 +108,9 @@ class Booking extends Model
 
     /**
      * @param $value
-     * @return $this
+     * @return Booking
      */
-    public function setTime($value)
+    public function setTime($value): self
     {
         $this->time = $value;
 
@@ -118,9 +119,9 @@ class Booking extends Model
 
     /**
      * @param $value
-     * @return $this
+     * @return Booking
      */
-    public function setState($value)
+    public function setState($value): self
     {
         $this->state = $value;
 

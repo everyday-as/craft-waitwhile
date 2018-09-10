@@ -51,9 +51,9 @@ class Guest extends Model
 
     /**
      * @param $value
-     * @return $this
+     * @return Guest
      */
-    public function setName($value)
+    public function setName($value): self
     {
         $this->name = $value;
 
@@ -62,9 +62,9 @@ class Guest extends Model
 
     /**
      * @param $value
-     * @return $this
+     * @return Guest
      */
-    public function setEmail($value)
+    public function setEmail($value): self
     {
         $this->email = $value;
 
@@ -73,9 +73,9 @@ class Guest extends Model
 
     /**
      * @param $value
-     * @return $this
+     * @return Guest
      */
-    public function setPhone($value)
+    public function setPhone($value): self
     {
         $this->phone = $value;
 
@@ -84,9 +84,9 @@ class Guest extends Model
 
     /**
      * @param $value
-     * @return $this
+     * @return Guest
      */
-    public function setNotes($value)
+    public function setNotes($value): self
     {
         $this->notes = $value;
 
@@ -95,9 +95,9 @@ class Guest extends Model
 
     /**
      * @param $value
-     * @return $this
+     * @return Guest
      */
-    public function setState($value)
+    public function setState($value): self
     {
         $this->state = $value;
 
