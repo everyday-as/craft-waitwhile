@@ -199,38 +199,40 @@ class Waitwhile extends Model
         $bookingLengthUnixMs = $bookingLength * 60 * 1000;
         $currentTimeUnixMsOnlyToday = $currentTimeUnixMs - $startOfDateUnixMs;
 
-        foreach($waitlistHoursToday as $period){
-            // we need to foreach each period to create available times within them based on $bookingLengthUnixMs
+        if($isOpen){
+            foreach($waitlistHoursToday as $period){
+                // we need to foreach each period to create available times within them based on $bookingLengthUnixMs
 
-            $start = $period['from'];
-            $end = $period['to'];
+                $start = $period['from'];
+                $end = $period['to'];
 
-            while($start < $end){
-                $realTimeUnixMs = $startOfDateUnixMs + $start;
-                $nextStart = $start + $bookingLengthUnixMs;
-                $nextStartRealTime = $startOfDateUnixMs + $nextStart;
+                while($start < $end){
+                    $realTimeUnixMs = $startOfDateUnixMs + $start;
+                    $nextStart = $start + $bookingLengthUnixMs;
+                    $nextStartRealTime = $startOfDateUnixMs + $nextStart;
 
-                // $currentTimeUnixMsOnlyToday must be less than $start
-                if($currentTimeUnixMsOnlyToday < $start) {
-                    // we need to check if available based on $bookings array
-                    $available = true;
+                    // $currentTimeUnixMsOnlyToday must be less than $start
+                    if($currentTimeUnixMsOnlyToday < $start) {
+                        // we need to check if available based on $bookings array
+                        $available = true;
 
-                    foreach($bookings as $booking) {
-                        // check if $booking['time'] is not the same as or within $realTimeUnixMs and $nextStart
-                        if($booking['time'] >= $realTimeUnixMs && $booking['time'] < $nextStartRealTime) $available = false;
+                        foreach($bookings as $booking) {
+                            // check if $booking['time'] is not the same as or within $realTimeUnixMs and $nextStart
+                            if($booking['time'] >= $realTimeUnixMs && $booking['time'] < $nextStartRealTime) $available = false;
+                        }
+
+                        // logic to add to $times array
+                        $times[] = [
+                            'start' => self::unix_ms_to_human($start),
+                            'start_unix_ms' => $start,
+                            'duration' => $bookingLengthUnixMs,
+                            'available' => $available
+                        ];
                     }
 
-                    // logic to add to $times array
-                    $times[] = [
-                        'start' => self::unix_ms_to_human($start),
-                        'start_unix_ms' => $start,
-                        'duration' => $bookingLengthUnixMs,
-                        'available' => $available
-                    ];
+                    // increment $start with the length of $bookingLengthUnixMs
+                    $start = $nextStart;
                 }
-
-                // increment $start with the length of $bookingLengthUnixMs
-                $start = $nextStart;
             }
         }
 
