@@ -54,6 +54,11 @@ class Plugin extends \craft\base\Plugin
             'basePath' => __DIR__ . '/translations',
             'allowOverrides' => true,
         ];
+
+        // register routes
+        Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_SITE_URL_RULES, function(RegisterUrlRulesEvent $event) {
+            $event->rules[$this->id . '/booking/times'] = $this->id . '/booking/times';
+        });
     }
 
     /**

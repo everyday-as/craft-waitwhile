@@ -176,7 +176,6 @@ class Waitwhile extends Model
      * @param string $date
      * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \yii\base\ExitException
      */
     public function getBookingTimesForDay(string $date): array
     {

@@ -41,4 +41,16 @@ class BookingController extends Controller
             'errors' => $booking->errors
         ));
     }
+
+    /**
+     * @param string $date
+     * @return string
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function actionTimes(string $date): string
+    {
+        $waitwhile = new Waitwhile();
+
+        return json_encode($waitwhile->getBookingTimesForDay($date));
+    }
 }

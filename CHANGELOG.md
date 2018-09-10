@@ -4,6 +4,7 @@
 - Added a `Waitwhile@getBookingTimesForDay('YYYY-MM-DD')` method that returns an array with the available times on the given day
 - Added a `Booking::formatBookins` method, only used internally
 - Added a booking length setting (in minutes)
+- Added `everyday-waitwhile/booking/times` action
 
 ## 1.0.6 - 2018-09-07
 - Added support for a hidden input field called `country_code` in submission for action `everyday-waitwhile/queue`
