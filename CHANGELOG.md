@@ -5,6 +5,7 @@
 but if it's an axios or other request you need to set the `Javascript-Request` header to 1 or true. 
 When sending JavaScript requests you need to deal with the error and redirect logic yourself.
 - Set response in waitwhile session for `BookingController` just like `QueueController` does
+- Added `start_real_unix_ms` to times array for `Waitwhile@getBookingTimesForDay`
 
 ## 1.1.0 - 2018-09-10
 - Added a `Waitwhile@getBookingTimesForDay('YYYY-MM-DD')` method that returns an array with the available times on the given day

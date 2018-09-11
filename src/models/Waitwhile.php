@@ -227,6 +227,7 @@ class Waitwhile extends Model
                         $times[$humanStart] = [
                             'start' => $humanStart,
                             'start_unix_ms' => $start,
+                            'start_real_unix_ms' => $realTimeUnixMs,
                             'duration' => $bookingLengthUnixMs,
                             'available' => $available
                         ];
