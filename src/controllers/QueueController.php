@@ -38,8 +38,7 @@ class QueueController extends Controller
         if($guest->validate()){
             $waitwhile = new Waitwhile();
 
-            //$response = $waitwhile->createWaitingGuest($guest);
-            $response = null;
+            $response = $waitwhile->createWaitingGuest($guest);
 
             if(!$waitwhile->error){
                 \Craft::$app->getSession()->set('waitwhile', $response);
