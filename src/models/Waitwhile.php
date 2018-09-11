@@ -222,8 +222,10 @@ class Waitwhile extends Model
                         }
 
                         // logic to add to $times array
-                        $times[] = [
-                            'start' => self::unix_ms_to_human($start),
+                        $humanStart = self::unix_ms_to_human($start);
+
+                        $times[$humanStart] = [
+                            'start' => $humanStart,
                             'start_unix_ms' => $start,
                             'duration' => $bookingLengthUnixMs,
                             'available' => $available
