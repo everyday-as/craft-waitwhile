@@ -4,7 +4,6 @@ namespace everyday\waitwhile\controllers;
 
 use craft\web\Controller;
 use everyday\waitwhile\models\Booking;
-use everyday\waitwhile\models\Guest;
 use everyday\waitwhile\models\Waitwhile;
 
 class BookingController extends Controller
@@ -14,6 +13,7 @@ class BookingController extends Controller
     /**
      * @return false|string|\yii\web\Response
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \craft\errors\MissingComponentException
      * @throws \yii\base\InvalidConfigException
      */
     public function actionIndex()

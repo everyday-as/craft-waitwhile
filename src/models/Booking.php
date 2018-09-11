@@ -7,7 +7,7 @@ use everyday\waitwhile\Plugin;
 
 class Booking extends Model
 {
-    public $name, $email, $phone, $notes, $duration, $time;
+    public $name, $email, $phone, $notes, $duration, $time, $resourceIds;
     public $state = 'waiting';
 
     public function init()
@@ -124,6 +124,17 @@ class Booking extends Model
     public function setState($value): self
     {
         $this->state = $value;
+
+        return $this;
+    }
+
+    /**
+     * @param array $values
+     * @return Booking
+     */
+    public function setResourceIds(array $values): self
+    {
+        $this->resourceIds = $values;
 
         return $this;
     }
