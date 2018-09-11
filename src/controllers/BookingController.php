@@ -40,9 +40,11 @@ class BookingController extends Controller
 
         if($booking->validate()){
             $waitwhile = new Waitwhile();
-            $waitwhile->createBooking($booking);
+            $response = $waitwhile->createBooking($booking);
 
             if(!$waitwhile->error) {
+                \Craft::$app->getSession()->set('waitwhile', $response);
+
                 if (!$isJavascript) {
                     return $this->redirect(isset($params['redirect']) ? $params['redirect'] : '/');
                 }
