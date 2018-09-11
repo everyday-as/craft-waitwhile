@@ -49,7 +49,7 @@ class BookingController extends Controller
                     return $this->redirect(isset($params['redirect']) ? $params['redirect'] : '/');
                 }
 
-                return json_encode(['success' => true]);
+                return $this->asJson(['success' => true]);
             }
 
             // error:
@@ -59,7 +59,7 @@ class BookingController extends Controller
                 ));
             }
 
-            return json_encode(['success' => false, 'errors' => array_values(call_user_func_array('array_merge', $waitwhile->errors))]);
+            return $this->asJson(['success' => false, 'errors' => array_values(call_user_func_array('array_merge', $waitwhile->errors))]);
         }
 
         if(!$isJavascript) {
@@ -68,7 +68,7 @@ class BookingController extends Controller
             ));
         }
 
-        return json_encode(['success' => false, 'errors' => array_values(call_user_func_array('array_merge', $booking->errors))]);
+        return $this->asJson(['success' => false, 'errors' => array_values(call_user_func_array('array_merge', $booking->errors))]);
     }
 
     /**
@@ -82,6 +82,6 @@ class BookingController extends Controller
 
         $waitwhile = new Waitwhile();
 
-        return json_encode($waitwhile->getBookingTimesForDay($params['date']));
+        return $this->asJson($waitwhile->getBookingTimesForDay($params['date']));
     }
 }

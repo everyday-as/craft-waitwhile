@@ -47,7 +47,7 @@ class QueueController extends Controller
                     return $this->redirect(isset($params['redirect']) ? $params['redirect'] : '/');
                 }
 
-                return json_encode(['success' => true]);
+                return $this->asJson(['success' => true]);
             }
 
             // error:
@@ -57,7 +57,7 @@ class QueueController extends Controller
                 ));
             }
 
-            return json_encode(['success' => false, 'errors' => array_values(call_user_func_array('array_merge', $waitwhile->errors))]);
+            return $this->asJson(['success' => false, 'errors' => array_values(call_user_func_array('array_merge', $waitwhile->errors))]);
         }
 
         // error
@@ -67,6 +67,6 @@ class QueueController extends Controller
             ));
         }
 
-        return json_encode(['success' => false, 'errors' => array_values(call_user_func_array('array_merge', $guest->errors))]);
+        return $this->asJson(['success' => false, 'errors' => array_values(call_user_func_array('array_merge', $guest->errors))]);
     }
 }
