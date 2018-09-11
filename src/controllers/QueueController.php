@@ -10,10 +10,18 @@ class QueueController extends Controller
 {
     protected $allowAnonymous = true;
 
+    /**
+     * @return false|string|\yii\web\Response
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \craft\errors\MissingComponentException
+     * @throws \yii\base\InvalidConfigException
+     */
     public function actionIndex()
     {
-        $params = \Craft::$app->request->bodyParams;
+        $isJavascript = (bool)\Craft::$app->request->getHeaders()['javascript-request']
+            || \Craft::$app->request->getIsAjax();
 
+        $params = \Craft::$app->request->getBodyParams();
         $phone = $params['phone'] ?? null;
 
         // if landcode hidden input field is set, append this to phone number unless phone number starts with +
@@ -30,21 +38,36 @@ class QueueController extends Controller
         if($guest->validate()){
             $waitwhile = new Waitwhile();
 
-            $response = $waitwhile->createWaitingGuest($guest);
+            //$response = $waitwhile->createWaitingGuest($guest);
+            $response = null;
 
             if(!$waitwhile->error){
                 \Craft::$app->getSession()->set('waitwhile', $response);
-                return $this->redirect(isset($params['redirect']) ? $params['redirect'] : '/');
+
+                if(!$isJavascript) {
+                    return $this->redirect(isset($params['redirect']) ? $params['redirect'] : '/');
+                }
+
+                return json_encode(['success' => true]);
             }
 
-            // a non 2xx response:
+            // error:
+            if(!$isJavascript) {
+                return \Craft::$app->urlManager->setRouteParams(array(
+                    'errors' => $waitwhile->errors
+                ));
+            }
+
+            return json_encode(['success' => false, 'errors' => array_values(call_user_func_array('array_merge', $waitwhile->errors))]);
+        }
+
+        // error
+        if(!$isJavascript){
             return \Craft::$app->urlManager->setRouteParams(array(
-                'errors' => $waitwhile->errors
+                'errors' => $guest->errors
             ));
         }
 
-        return \Craft::$app->urlManager->setRouteParams(array(
-            'errors' => $guest->errors
-        ));
+        return json_encode(['success' => false, 'errors' => array_values(call_user_func_array('array_merge', $guest->errors))]);
     }
 }

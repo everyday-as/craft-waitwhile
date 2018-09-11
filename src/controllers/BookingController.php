@@ -11,9 +11,17 @@ class BookingController extends Controller
 {
     protected $allowAnonymous = true;
 
+    /**
+     * @return false|string|\yii\web\Response
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \yii\base\InvalidConfigException
+     */
     public function actionIndex()
     {
-        $params = \Craft::$app->request->bodyParams;
+        $isJavascript = (bool)\Craft::$app->request->getHeaders()['javascript-request']
+            || \Craft::$app->request->getIsAjax();
+
+        $params = \Craft::$app->request->getBodyParams();
 
         $phone = $params['phone'] ?? null;
 
@@ -34,23 +42,44 @@ class BookingController extends Controller
             $waitwhile = new Waitwhile();
             $waitwhile->createBooking($booking);
 
-            $this->redirectToPostedUrl();
+            if(!$waitwhile->error) {
+                if (!$isJavascript) {
+                    return $this->redirect(isset($params['redirect']) ? $params['redirect'] : '/');
+                }
+
+                return json_encode(['success' => true]);
+            }
+
+            // error:
+            if(!$isJavascript) {
+                return \Craft::$app->urlManager->setRouteParams(array(
+                    'errors' => $waitwhile->errors
+                ));
+            }
+
+            return json_encode(['success' => false, 'errors' => array_values(call_user_func_array('array_merge', $waitwhile->errors))]);
         }
 
-        \Craft::$app->urlManager->setRouteParams(array(
-            'errors' => $booking->errors
-        ));
+        if(!$isJavascript) {
+            \Craft::$app->urlManager->setRouteParams(array(
+                'errors' => $booking->errors
+            ));
+        }
+
+        return json_encode(['success' => false, 'errors' => array_values(call_user_func_array('array_merge', $booking->errors))]);
     }
 
     /**
-     * @param string $date
      * @return string
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \yii\base\InvalidConfigException
      */
-    public function actionTimes(string $date): string
+    public function actionTimes(): string
     {
+        $params = \Craft::$app->request->getBodyParams();
+
         $waitwhile = new Waitwhile();
 
-        return json_encode($waitwhile->getBookingTimesForDay($date));
+        return json_encode($waitwhile->getBookingTimesForDay($params['date']));
     }
 }
