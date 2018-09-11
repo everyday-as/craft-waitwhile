@@ -13,4 +13,4 @@ You can display information in templates or create a booking or put someone in t
 The documentation can be found [here](https://github.com/Everyday-AS/craft-waitwhile/wiki)
 
 ## To do list
-- [ ] Replicate Waitwhile's booking system for custom use
+- [x] Replicate Waitwhile's booking system for custom use
