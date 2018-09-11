@@ -1,11 +1,15 @@
 # Release Notes for Everyday Waitwhile
 
+## 1.1.2 - 2018-09-11
+- Reverts 1.1.1 use `Controller@asJson` instead of `json_decode`
+
 ## 1.1.1 - 2018-09-11
 - Refactored `BookingController` and `QueueController`. They now support JavaScript requests - if it's an ajax request you have to do nothing, 
 but if it's an axios or other request you need to set the `Javascript-Request` header to 1 or true. 
 When sending JavaScript requests you need to deal with the error and redirect logic yourself.
 - Set response in waitwhile session for `BookingController` just like `QueueController` does
 - Added `start_real_unix_ms` to times array for `Waitwhile@getBookingTimesForDay`
+- Use `Controller@asJson` instead of `json_decode`
 
 ## 1.1.0 - 2018-09-10
 - Added a `Waitwhile@getBookingTimesForDay('YYYY-MM-DD')` method that returns an array with the available times on the given day
