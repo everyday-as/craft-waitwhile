@@ -246,6 +246,59 @@ class Waitwhile extends Model
     }
 
     /**
+     * @return array
+     */
+    public function getBusinessHours(): array
+    {
+        return self::formatHours($this->getWaitlist()['businessHours']);
+    }
+
+    /**
+     * @return array
+     */
+    public function getWaitlistHours(): array
+    {
+        return self::formatHours($this->getWaitlist()['waitlistHours']);
+    }
+
+    /**
+     * Formats business and waitlist hours
+     *
+     * @param array $hours
+     * @return array
+     */
+    private function formatHours(array $hours): array
+    {
+        $formatted = [];
+
+        // map weekdays to a number and sort them properly
+        // thanks a lot Waitwhile
+        $dowArray = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+        $dowArray = array_flip($dowArray);
+
+        foreach($hours as $key => $value){
+            $newValue = [];
+            $newValue['isOpen'] = $value['isOpen'];
+
+            foreach($value['periods'] as $periodKey => $periodValue){
+                $periodUnixMs = $value['periods'][$periodKey];
+
+                $newValue['periods'][$periodKey] = [
+                    'from' => self::unix_ms_to_human($periodUnixMs['from']),
+                    'to' => self::unix_ms_to_human($periodUnixMs['to'])
+                ];
+            }
+
+            $formatted[$dowArray[$key]] = $newValue;
+        }
+
+        // sort by asc keys so the array now fits our weekday mapping
+        ksort($formatted);
+
+        return $formatted;
+    }
+
+    /**
      * @param $value
      * @return false|string
      */

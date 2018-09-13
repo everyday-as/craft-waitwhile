@@ -1,5 +1,8 @@
 # Release Notes for Everyday Waitwhile
 
+## 1.1.3 - 2018-09-13
+- Added `craft.waitwhile.getBusinessHours` and `craft.waitwhile.getWaitlistHours` in a better format than the default returned by Waitwhile
+
 ## 1.1.2 - 2018-09-11
 - Reverts 1.1.1 use `Controller@asJson` instead of `json_decode`
 
