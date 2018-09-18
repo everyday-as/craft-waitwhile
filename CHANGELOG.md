@@ -1,6 +1,6 @@
 # Release Notes for Everyday Waitwhile
 
-## 1.1.4 - 2018-09-18
+## 1.1.4 - 
 - Added a birthdate field to Booking and Guest. This is a useful field a lot of people have a need for. Validation is if it's numeric and 6 in length (ddmmyy).
 
 ## 1.1.3 - 2018-09-13
