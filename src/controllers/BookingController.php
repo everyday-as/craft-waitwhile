@@ -35,6 +35,7 @@ class BookingController extends Controller
             ->setPhone($phone)
             ->setName($params['name'])
             ->setNotes($params['notes'] ?? null)
+            ->setBirthdate($params['birthdate'] ?? null)
             ->setDuration($params['duration'])
             ->setTime($params['time']);
 

@@ -6,7 +6,7 @@ use craft\base\Model;
 
 class Guest extends Model
 {
-    public $name, $email, $phone, $notes;
+    public $name, $email, $phone, $notes, $birthdate;
     public $state = 'waiting';
 
     public function init()
@@ -25,6 +25,9 @@ class Guest extends Model
             ],
             [
                 'email', 'emailValid'
+            ],
+            [
+                'birthdate', 'birthdateValid'
             ]
         ];
     }
@@ -46,6 +49,16 @@ class Guest extends Model
     {
         if (!filter_var($this->$attribute, FILTER_VALIDATE_EMAIL)) {
             $this->addError($attribute, \Craft::t('everyday-waitwhile', 'email_invalid'));
+        }
+    }
+
+    /**
+     * @param $attribute
+     */
+    public function birthdateValid($attribute)
+    {
+        if (strlen($this->$attribute) !== 6 || !is_numeric($this->$attribute)) {
+            $this->addError($attribute, \Craft::t('everyday-waitwhile', 'birthdate_invalid'));
         }
     }
 
@@ -89,6 +102,17 @@ class Guest extends Model
     public function setNotes($value): self
     {
         $this->notes = $value;
+
+        return $this;
+    }
+
+    /**
+     * @param $value
+     * @return Guest
+     */
+    public function setBirthdate($value): self
+    {
+        $this->birthdate = $value;
 
         return $this;
     }

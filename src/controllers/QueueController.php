@@ -33,6 +33,7 @@ class QueueController extends Controller
             ->setEmail($params['email'] ?? null)
             ->setPhone($phone)
             ->setNotes($params['notes'] ?? null)
+            ->setBirthdate($params['birthdate'] ?? null)
             ->setName($params['name']);
 
         if($guest->validate()){
