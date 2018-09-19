@@ -1,7 +1,9 @@
 # Release Notes for Everyday Waitwhile
 
-## 1.1.4 - 
+## 1.1.4 - 2018-09-19
 - Added a birthdate field to Booking and Guest. This is a useful field a lot of people have a need for. Validation is if it's numeric and 6 in length (ddmmyy).
+- The above is sent as an addition to a note as I can not seem to make custom fields work at all
+- Made error messages more obvious 
 
 ## 1.1.3 - 2018-09-13
 - Added `craft.waitwhile.getBusinessHours` and `craft.waitwhile.getWaitlistHours` in a better format than the default returned by Waitwhile

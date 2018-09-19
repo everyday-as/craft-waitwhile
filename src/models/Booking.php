@@ -114,7 +114,7 @@ class Booking extends Model
      */
     public function setBirthdate($value): self
     {
-        $this->birthdate = $value;
+        $this->notes = '(' . \Craft::t('everyday-waitwhile', 'birthdate') . ' ' . $value . '): ' . $this->notes;
 
         return $this;
     }
@@ -161,5 +161,24 @@ class Booking extends Model
         $this->resourceIds = $values;
 
         return $this;
+    }
+
+    /**
+     * @param array $fields
+     * @param array $expand
+     * @param bool $recursive
+     * @return array
+     */
+    public function toArray(array $fields = [], array $expand = [], $recursive = true)
+    {
+        $array = parent::toArray($fields, $expand, $recursive);
+
+        foreach($array as $key => $value){
+            if(is_null($value) || empty($value)){
+                unset($array[$key]);
+            }
+        }
+
+        return $array;
     }
 }

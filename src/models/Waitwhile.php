@@ -73,8 +73,15 @@ class Waitwhile extends Model
 
             return json_decode($res, true);
         } catch (\Exception $e) {
+            $error_msg = 'Received an invalid response from the Waitwhile API';
+
+            $message = json_decode(explode('response:', $e->getMessage())[1], true);
+            if(!is_null($message)){
+                $error_msg = $message['message'];
+            }
+
             $this->error = true;
-            $this->errors[] = ['api' => 'Received an invalid response from the Waitwhile API'];
+            $this->errors[] = ['api' => $error_msg];
         }
 
         return [];
