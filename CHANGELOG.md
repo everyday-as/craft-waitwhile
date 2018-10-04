@@ -1,5 +1,9 @@
 # Release Notes for Everyday Waitwhile
 
+## 1.1.6 - 2018-10-04
+- I forgot to take specific day into consideration in `craft.waitwhile.getBookingTimesForDay`
+- Change format returned by any of the `AbsoluteHours` function. Instead of mon through fri it now returns dates, with an addition of any of the other custom dates defined.
+
 ## 1.1.5 - 2018-10-04
 - Added `craft.waitwhile.getAbsoluteBusinessHours` to accomodate Waitwhile's newest API addition in `businessHoursByDate`
 - Added `craft.waitwhile.getAbsoluteWaitlistHours` to accomodate Waitwhile's newest API addition in `businessWaitlistByDate`

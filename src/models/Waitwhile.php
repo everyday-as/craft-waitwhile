@@ -206,6 +206,33 @@ class Waitwhile extends Model
     }
 
     /**
+     * @param $hours
+     * @param $hoursByDate
+     * @return array
+     * @throws \Exception
+     */
+    private function formatAbsoluteHours($hours, $hoursByDate): array
+    {
+        $days = $this->getWeekDays();
+
+        foreach($days as $date => $day){
+            $isOverrideSet = isset($hoursByDate[$date]);
+            if($isOverrideSet){
+                $hours[$date] = $hoursByDate[$date];
+            } else {
+                $hours[$date] = $hours[$day];
+            }
+
+            unset($hours[$day]);
+        }
+
+        // add the remaining $hoursByDate
+        $hours = $hours + $hoursByDate;
+
+        return $hours;
+    }
+
+    /**
      * @return array
      * @throws \Exception
      */
@@ -213,19 +240,7 @@ class Waitwhile extends Model
     {
         $waitlist = $this->getWaitlist();
 
-        $days = $this->getWeekDays();
-
-        $hours = $waitlist['businessHours'];
-        $hoursByDate = $waitlist['businessHoursByDate'];
-
-        foreach($days as $date => $day){
-            $isOverrideSet = isset($hoursByDate[$date]);
-            if($isOverrideSet){
-                $hours[$day] = $hoursByDate[$date];
-            }
-        }
-
-        return $hours;
+        return $this->formatAbsoluteHours($waitlist['businessHours'], $waitlist['businessHoursByDate']);
     }
 
     /**
@@ -236,19 +251,7 @@ class Waitwhile extends Model
     {
         $waitlist = $this->getWaitlist();
 
-        $days = $this->getWeekDays();
-
-        $hours = $waitlist['waitlistHours'];
-        $hoursByDate = $waitlist['waitlistHoursByDate'];
-
-        foreach($days as $date => $day){
-            $isOverrideSet = isset($hoursByDate[$date]);
-            if($isOverrideSet){
-                $hours[$day] = $hoursByDate[$date];
-            }
-        }
-
-        return $hours;
+        return $this->formatAbsoluteHours($waitlist['waitlistHours'], $waitlist['waitlistHoursByDate']);
     }
 
     /**
@@ -259,19 +262,7 @@ class Waitwhile extends Model
     {
         $waitlist = $this->getWaitlist();
 
-        $days = $this->getWeekDays();
-
-        $hours = $waitlist['bookingHours'];
-        $hoursByDate = $waitlist['bookingHoursByDate'];
-
-        foreach($days as $date => $day){
-            $isOverrideSet = isset($hoursByDate[$date]);
-            if($isOverrideSet){
-                $hours[$day] = $hoursByDate[$date];
-            }
-        }
-
-        return $hours;
+        return $this->formatAbsoluteHours($waitlist['bookingHours'], $waitlist['bookingHoursByDate']);
     }
 
     /**
@@ -286,13 +277,21 @@ class Waitwhile extends Model
         $startOfDateUnixMs = $startOfDate->getTimestamp() * 1000;
         $currentTimeUnixMs = (new \DateTime())->getTimestamp() * 1000;
 
+        $dateInt = (int)$startOfDate->format('Ymd');
+
         // bookings from start of today
         $bookings = $this->getBookingsFrom($startOfDateUnixMs);
 
         $waitlistHours = $this->getAbsoluteWaitlistHours();
-        $currentDayAbbreviation = strtolower($startOfDate->format('D'));
-        $waitlistHoursToday = $waitlistHours[$currentDayAbbreviation]['periods'];
-        $isOpen = $waitlistHours[$currentDayAbbreviation]['isOpen'];
+        if(isset($waitlistHours[$dateInt])){
+            $waitlistHoursToday = $waitlistHours[$dateInt]['periods'];
+            $isOpen = $waitlistHours[$dateInt]['isOpen'];
+        } else {
+            $waitlistHours = $this->getWaitlist()['waitlistHours'];
+            $currentDayAbbreviation = strtolower($startOfDate->format('D'));
+            $waitlistHoursToday = $waitlistHours[$currentDayAbbreviation]['periods'];
+            $isOpen = $waitlistHours[$currentDayAbbreviation]['isOpen'];
+        }
 
         $bookingLength = $this->settings['booking_length'];
 
