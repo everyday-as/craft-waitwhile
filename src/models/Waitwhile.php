@@ -43,7 +43,6 @@ class Waitwhile extends Model
      * Fetch the waitwhile session
      *
      * @return mixed
-     * @throws \craft\errors\MissingComponentException
      */
     public function getSession()
     {
@@ -180,6 +179,102 @@ class Waitwhile extends Model
     }
 
     /**
+     * @return array
+     * @throws \Exception
+     */
+    private function getWeekDays(): array
+    {
+        $days = [
+            'mon',
+            'tue',
+            'wed',
+            'thu',
+            'fri',
+            'sat',
+            'sun',
+        ];
+
+        $date = (new \DateTime('monday this week'));
+        foreach($days as $key => $day){
+            $days[(int)$date->format('Ymd')] = $day;
+            unset($days[$key]);
+
+            $date->add(new \DateInterval('P1D'));
+        }
+
+        return $days;
+    }
+
+    /**
+     * @return array
+     * @throws \Exception
+     */
+    public function getAbsoluteBusinessHours(): array
+    {
+        $waitlist = $this->getWaitlist();
+
+        $days = $this->getWeekDays();
+
+        $hours = $waitlist['businessHours'];
+        $hoursByDate = $waitlist['businessHoursByDate'];
+
+        foreach($days as $date => $day){
+            $isOverrideSet = isset($hoursByDate[$date]);
+            if($isOverrideSet){
+                $hours[$day] = $hoursByDate[$date];
+            }
+        }
+
+        return $hours;
+    }
+
+    /**
+     * @return array
+     * @throws \Exception
+     */
+    public function getAbsoluteWaitlistHours(): array
+    {
+        $waitlist = $this->getWaitlist();
+
+        $days = $this->getWeekDays();
+
+        $hours = $waitlist['waitlistHours'];
+        $hoursByDate = $waitlist['waitlistHoursByDate'];
+
+        foreach($days as $date => $day){
+            $isOverrideSet = isset($hoursByDate[$date]);
+            if($isOverrideSet){
+                $hours[$day] = $hoursByDate[$date];
+            }
+        }
+
+        return $hours;
+    }
+
+    /**
+     * @return array
+     * @throws \Exception
+     */
+    public function getAbsoluteBookingHours(): array
+    {
+        $waitlist = $this->getWaitlist();
+
+        $days = $this->getWeekDays();
+
+        $hours = $waitlist['bookingHours'];
+        $hoursByDate = $waitlist['bookingHoursByDate'];
+
+        foreach($days as $date => $day){
+            $isOverrideSet = isset($hoursByDate[$date]);
+            if($isOverrideSet){
+                $hours[$day] = $hoursByDate[$date];
+            }
+        }
+
+        return $hours;
+    }
+
+    /**
      * @param string $date
      * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException
@@ -194,7 +289,7 @@ class Waitwhile extends Model
         // bookings from start of today
         $bookings = $this->getBookingsFrom($startOfDateUnixMs);
 
-        $waitlistHours = $this->getWaitlist()['waitlistHours'];
+        $waitlistHours = $this->getAbsoluteWaitlistHours();
         $currentDayAbbreviation = strtolower($startOfDate->format('D'));
         $waitlistHoursToday = $waitlistHours[$currentDayAbbreviation]['periods'];
         $isOpen = $waitlistHours[$currentDayAbbreviation]['isOpen'];

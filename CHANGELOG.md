@@ -1,5 +1,11 @@
 # Release Notes for Everyday Waitwhile
 
+## 1.1.5 - 2018-10-04
+- Added `craft.waitwhile.getAbsoluteBusinessHours` to accomodate Waitwhile's newest API addition in `businessHoursByDate`
+- Added `craft.waitwhile.getAbsoluteWaitlistHours` to accomodate Waitwhile's newest API addition in `businessWaitlistByDate`
+- Added `craft.waitwhile.getAbsoluteBookingHours` to accomodate Waitwhile's newest API addition in `businessBookingByDate`
+- `craft.waitwhile.getBookingTimesForDay` now uses `getAbsoluteWaitlistHours`
+
 ## 1.1.4 - 2018-09-19
 - Added a birthdate field to Booking and Guest. This is a useful field a lot of people have a need for. Validation is if it's numeric and 6 in length (ddmmyy).
 - The above is sent as an addition to a note as I can not seem to make custom fields work at all
