@@ -37,7 +37,7 @@ class Guest extends Model
      */
     public function phoneCountryCodeRequired($attribute)
     {
-        if(substr($this->$attribute, 0, strlen('+')) !== '+'){
+        if (substr($this->$attribute, 0, strlen('+')) !== '+') {
             $this->addError($attribute, \Craft::t('everyday-waitwhile', 'phone_landcode_required'));
         }
     }
@@ -138,8 +138,8 @@ class Guest extends Model
     {
         $array = parent::toArray($fields, $expand, $recursive);
 
-        foreach($array as $key => $value){
-            if(is_null($value) || empty($value)){
+        foreach ($array as $key => $value) {
+            if (is_null($value) || empty($value)) {
                 unset($array[$key]);
             }
         }

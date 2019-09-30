@@ -10,7 +10,6 @@ class Waitwhile extends Model
     public $waitlist = null;
     public $waitlists = null;
     public $waitlistStatus = null;
-    public $guests = null;
     public $guestsWaiting = null;
     public $bookings = null;
     public $bookingsFrom = null;
@@ -18,10 +17,7 @@ class Waitwhile extends Model
     public $error = false;
     public $errors = [];
 
-    protected $headers;
     protected $settings;
-
-    protected $cache;
 
     /**
      * @return void
@@ -34,7 +30,7 @@ class Waitwhile extends Model
         $this->settings = Plugin::getInstance()->settings;
 
         // do not continue if api key is not set
-        if($this->settings->api_key === null){
+        if ($this->settings->api_key === null) {
             return;
         }
     }
@@ -75,7 +71,7 @@ class Waitwhile extends Model
             $error_msg = 'Received an invalid response from the Waitwhile API';
 
             $message = json_decode(explode('response:', $e->getMessage())[1], true);
-            if(!is_null($message)){
+            if (!is_null($message)) {
                 $error_msg = $message['message'];
             }
 
@@ -171,9 +167,7 @@ class Waitwhile extends Model
      */
     public function getResources(): array
     {
-        $settings = $this->settings;
-
-        return \Craft::$app->cache->getOrSet("waitwhileResources", function ($cache) use($settings) {
+        return \Craft::$app->cache->getOrSet("waitwhileResources", function () {
             return $this->resources === null ? $this->makeRequest('resources') : $this->resources;
         }, 300);
     }
@@ -195,7 +189,7 @@ class Waitwhile extends Model
         ];
 
         $date = (new \DateTime('monday this week'));
-        foreach($days as $key => $day){
+        foreach ($days as $key => $day) {
             $days[(int)$date->format('Ymd')] = $day;
             unset($days[$key]);
 
@@ -215,9 +209,9 @@ class Waitwhile extends Model
     {
         $days = $this->getWeekDays();
 
-        foreach($days as $date => $day){
+        foreach ($days as $date => $day) {
             $isOverrideSet = isset($hoursByDate[$date]);
-            if($isOverrideSet){
+            if ($isOverrideSet) {
                 $hours[$date] = $hoursByDate[$date];
             } else {
                 $hours[$date] = $hours[$day];
@@ -273,7 +267,7 @@ class Waitwhile extends Model
     public function getBookingTimesForDay(string $date): array
     {
         // start of $date
-        $startOfDate = (new \DateTime($date))->setTime(0,0);
+        $startOfDate = (new \DateTime($date))->setTime(0, 0);
         $startOfDateUnixMs = $startOfDate->getTimestamp() * 1000;
         $currentTimeUnixMs = (new \DateTime())->getTimestamp() * 1000;
 
@@ -283,7 +277,7 @@ class Waitwhile extends Model
         $bookings = $this->getBookingsFrom($startOfDateUnixMs);
 
         $waitlistHours = $this->getAbsoluteWaitlistHours();
-        if(isset($waitlistHours[$dateInt])){
+        if (isset($waitlistHours[$dateInt])) {
             $waitlistHoursToday = $waitlistHours[$dateInt]['periods'];
             $isOpen = $waitlistHours[$dateInt]['isOpen'];
         } else {
@@ -300,26 +294,26 @@ class Waitwhile extends Model
         $bookingLengthUnixMs = $bookingLength * 60 * 1000;
         $currentTimeUnixMsOnlyToday = $currentTimeUnixMs - $startOfDateUnixMs;
 
-        if($isOpen){
-            foreach($waitlistHoursToday as $period){
+        if ($isOpen) {
+            foreach ($waitlistHoursToday as $period) {
                 // we need to foreach each period to create available times within them based on $bookingLengthUnixMs
 
                 $start = $period['from'];
                 $end = $period['to'];
 
-                while($start < $end){
+                while ($start < $end) {
                     $realTimeUnixMs = $startOfDateUnixMs + $start;
                     $nextStart = $start + $bookingLengthUnixMs;
                     $nextStartRealTime = $startOfDateUnixMs + $nextStart;
 
                     // $currentTimeUnixMsOnlyToday must be less than $start
-                    if($currentTimeUnixMsOnlyToday < $start) {
+                    if ($currentTimeUnixMsOnlyToday < $start) {
                         // we need to check if available based on $bookings array
                         $available = true;
 
-                        foreach($bookings as $booking) {
+                        foreach ($bookings as $booking) {
                             // check if $booking['time'] is not the same as or within $realTimeUnixMs and $nextStart
-                            if($booking['time'] >= $realTimeUnixMs && $booking['time'] < $nextStartRealTime) $available = false;
+                            if ($booking['time'] >= $realTimeUnixMs && $booking['time'] < $nextStartRealTime) $available = false;
                         }
 
                         // logic to add to $times array
@@ -377,11 +371,11 @@ class Waitwhile extends Model
         $dowArray = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
         $dowArray = array_flip($dowArray);
 
-        foreach($hours as $key => $value){
+        foreach ($hours as $key => $value) {
             $newValue = [];
             $newValue['isOpen'] = $value['isOpen'];
 
-            foreach($value['periods'] as $periodKey => $periodValue){
+            foreach ($value['periods'] as $periodKey => $periodValue) {
                 $periodUnixMs = $value['periods'][$periodKey];
 
                 $newValue['periods'][$periodKey] = [

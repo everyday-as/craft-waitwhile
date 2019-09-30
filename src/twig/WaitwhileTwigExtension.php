@@ -12,8 +12,8 @@ class WaitwhileTwigExtension extends \Twig_Extension
     public function getFilters()
     {
         return array(
-            new \Twig_Filter('waitwhile_unix_ms_to_human', array($this, 'waitwhile_unix_ms_to_human')),
-            new \Twig_Filter('waitwhile_unix_ms_to_minutes', array($this, 'waitwhile_unix_ms_to_minutes')),
+            new \Twig_Filter('waitwhile_unix_ms_to_human', [$this, 'waitwhile_unix_ms_to_human']),
+            new \Twig_Filter('waitwhile_unix_ms_to_minutes', [$this, 'waitwhile_unix_ms_to_minutes']),
         );
     }
 

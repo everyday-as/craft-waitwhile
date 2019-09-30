@@ -18,14 +18,14 @@ class QueueController extends Controller
      */
     public function actionIndex()
     {
-        $isJavascript = (bool)\Craft::$app->request->getHeaders()['javascript-request']
-            || \Craft::$app->request->getIsAjax();
+        $isJavascript = (bool)\Craft::$app->request->getHeaders()['javascript-request'] ||
+            \Craft::$app->request->getIsAjax();
 
         $params = \Craft::$app->request->getBodyParams();
         $phone = $params['phone'] ?? null;
 
         // if landcode hidden input field is set, append this to phone number unless phone number starts with +
-        if($phone !== null && isset($params['country_code']) && substr($phone, 0, strlen('+')) !== '+'){
+        if ($phone !== null && isset($params['country_code']) && substr($phone, 0, strlen('+')) !== '+') {
             $phone = '+' . $params['country_code'] . $phone;
         }
 
@@ -36,15 +36,15 @@ class QueueController extends Controller
             ->setBirthdate($params['birthdate'] ?? null)
             ->setName($params['name']);
 
-        if($guest->validate()){
+        if ($guest->validate()) {
             $waitwhile = new Waitwhile();
 
             $response = $waitwhile->createWaitingGuest($guest);
 
-            if(!$waitwhile->error){
+            if (!$waitwhile->error) {
                 \Craft::$app->getSession()->set('waitwhile', $response);
 
-                if(!$isJavascript) {
+                if (!$isJavascript) {
                     return $this->redirect(isset($params['redirect']) ? $params['redirect'] : '/');
                 }
 
@@ -52,7 +52,7 @@ class QueueController extends Controller
             }
 
             // error:
-            if(!$isJavascript) {
+            if (!$isJavascript) {
                 return \Craft::$app->urlManager->setRouteParams(array(
                     'errors' => $waitwhile->errors
                 ));
@@ -62,7 +62,7 @@ class QueueController extends Controller
         }
 
         // error
-        if(!$isJavascript){
+        if (!$isJavascript) {
             return \Craft::$app->urlManager->setRouteParams(array(
                 'errors' => $guest->errors
             ));
