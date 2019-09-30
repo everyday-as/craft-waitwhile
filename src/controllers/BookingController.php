@@ -18,15 +18,15 @@ class BookingController extends Controller
      */
     public function actionIndex()
     {
-        $isJavascript = (bool)\Craft::$app->request->getHeaders()['javascript-request']
-            || \Craft::$app->request->getIsAjax();
+        $isJavascript = (bool)\Craft::$app->request->getHeaders()['javascript-request'] ||
+            \Craft::$app->request->getIsAjax();
 
         $params = \Craft::$app->request->getBodyParams();
 
         $phone = $params['phone'] ?? null;
 
         // if landcode hidden input field is set, append this to phone number unless phone number starts with +
-        if($phone !== null && isset($params['country_code']) && substr($phone, 0, strlen('+')) !== '+'){
+        if ($phone !== null && isset($params['country_code']) && substr($phone, 0, strlen('+')) !== '+') {
             $phone = '+' . $params['country_code'] . $phone;
         }
 
@@ -39,11 +39,11 @@ class BookingController extends Controller
             ->setDuration($params['duration'])
             ->setTime($params['time']);
 
-        if($booking->validate()){
+        if ($booking->validate()) {
             $waitwhile = new Waitwhile();
             $response = $waitwhile->createBooking($booking);
 
-            if(!$waitwhile->error) {
+            if (!$waitwhile->error) {
                 \Craft::$app->getSession()->set('waitwhile', $response);
 
                 if (!$isJavascript) {
@@ -54,7 +54,7 @@ class BookingController extends Controller
             }
 
             // error:
-            if(!$isJavascript) {
+            if (!$isJavascript) {
                 return \Craft::$app->urlManager->setRouteParams(array(
                     'errors' => $waitwhile->errors
                 ));
@@ -63,7 +63,7 @@ class BookingController extends Controller
             return json_encode(['success' => false, 'errors' => array_values(call_user_func_array('array_merge', $waitwhile->errors))]);
         }
 
-        if(!$isJavascript) {
+        if (!$isJavascript) {
             \Craft::$app->urlManager->setRouteParams(array(
                 'errors' => $booking->errors
             ));
